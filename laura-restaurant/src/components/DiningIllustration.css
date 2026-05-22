@@ -1,0 +1,11 @@
+.dining-illustration {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.08));
+  transition: filter 0.5s ease;
+}
+
+.dining-illustration:hover {
+  filter: drop-shadow(0 0 60px rgba(212, 175, 55, 0.14));
+}

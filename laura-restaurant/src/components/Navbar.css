@@ -1,0 +1,119 @@
+/* ─── Liquid Glass Navbar ─── */
+.navbar {
+  position: fixed;
+  top: 1.1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 3.5rem);
+  max-width: 1160px;
+  padding: 0.75rem 1.75rem;
+  z-index: 1000;
+  border-radius: 100px;
+  transition: all 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+
+  background: rgba(8, 8, 8, 0.28);
+  backdrop-filter: blur(28px) saturate(180%) brightness(0.9);
+  -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(0.9);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 0 0 0.5px rgba(0, 0, 0, 0.3);
+}
+
+.navbar.scrolled {
+  background: rgba(8, 8, 8, 0.72);
+  border-color: rgba(212, 175, 55, 0.12);
+  box-shadow:
+    0 12px 44px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 0 0.5px rgba(212, 175, 55, 0.06);
+}
+
+.navbar-container {
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-logo {
+  flex: 1;
+  font-family: var(--font-primary);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent-color);
+  letter-spacing: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Logo sin caja de fondo visible */
+.navbar-logo img {
+  mix-blend-mode: screen;
+  filter: brightness(1.1);
+}
+
+.navbar-menu {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  gap: 2.25rem;
+}
+
+.navbar-action {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.navbar-menu a {
+  color: rgba(240, 236, 228, 0.85);
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  transition: color 0.3s ease;
+  padding: 0.4rem 0;
+  position: relative;
+}
+
+.navbar-menu a:hover {
+  color: var(--accent-color);
+}
+
+.navbar-menu a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background: linear-gradient(to right, var(--accent-color), transparent);
+  transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.navbar-menu a:hover::after {
+  width: 100%;
+}
+
+.btn-sm {
+  padding: 0.5rem 1.35rem;
+  font-size: 0.68rem;
+  letter-spacing: 2px;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    top: 0.75rem;
+    width: calc(100% - 2rem);
+    padding: 0.7rem 1.25rem;
+  }
+
+  .navbar-menu {
+    display: none;
+  }
+}

@@ -1,0 +1,169 @@
+.footer {
+  background-color: #040404;
+  padding: 5rem 0 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Línea dorada decorativa en la parte superior */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--accent-color) 30%, var(--accent-color) 70%, transparent);
+  opacity: 0.4;
+}
+
+/* Brillo ambiental sutil */
+.footer::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(212,175,55,0.15), transparent);
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 4rem;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-brand {
+  flex: 2;
+  min-width: 300px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer-brand h2 {
+  font-family: var(--font-primary);
+  font-style: italic;
+  font-size: 2.4rem;
+  font-weight: 300;
+  color: var(--accent-color);
+  margin-bottom: 1rem;
+  letter-spacing: 2px;
+}
+
+.footer-brand p {
+  color: rgba(240, 236, 228, 0.4);
+  max-width: 350px;
+  font-size: 0.95rem;
+  font-weight: 300;
+  line-height: 1.8;
+  margin: 0 auto;
+}
+
+.footer-links,
+.footer-social {
+  flex: 1;
+  min-width: 150px;
+}
+
+.footer-social {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.footer-links h3,
+.footer-social h3 {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 3.5px;
+  color: var(--accent-color);
+  margin-bottom: 1.75rem;
+}
+
+.footer-links ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.footer-links a {
+  color: rgba(240, 236, 228, 0.45);
+  transition: color 0.3s ease, letter-spacing 0.3s ease;
+  font-size: 0.88rem;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+}
+
+.footer-links a:hover {
+  color: var(--accent-color);
+  letter-spacing: 1.5px;
+}
+
+/* ─── Íconos sociales ─── */
+.social-icons {
+  display: flex;
+  gap: 0.85rem;
+}
+
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: rgba(240, 236, 228, 0.5);
+  transition: all 0.35s var(--ease-out-expo);
+  background: transparent;
+}
+
+.social-icon:hover {
+  color: #fff;
+  transform: translateY(-3px);
+}
+
+.social-icon.whatsapp:hover {
+  background-color: rgba(37, 211, 102, 0.15);
+  border-color: #25D366;
+  color: #25D366;
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.2);
+}
+
+.social-icon.instagram:hover {
+  border-color: #d6249f;
+  color: #d6249f;
+  background: radial-gradient(circle at 30% 107%, rgba(253, 244, 151, 0.08) 0%, rgba(253, 89, 73, 0.08) 45%, rgba(214, 36, 159, 0.12) 60%, rgba(40, 90, 235, 0.08) 90%);
+  box-shadow: 0 6px 20px rgba(214, 36, 159, 0.2);
+}
+
+.social-icon.facebook:hover {
+  background-color: rgba(24, 119, 242, 0.12);
+  border-color: #1877F2;
+  color: #1877F2;
+  box-shadow: 0 6px 20px rgba(24, 119, 242, 0.2);
+}
+
+/* ─── Línea inferior ─── */
+.footer-bottom {
+  text-align: center;
+  padding-top: 2.5rem;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  color: rgba(240, 236, 228, 0.25);
+  font-size: 0.78rem;
+  letter-spacing: 1.5px;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  position: relative;
+  z-index: 1;
+}

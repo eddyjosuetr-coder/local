@@ -1,0 +1,207 @@
+.hero {
+  height: 100vh;
+  min-height: 700px;
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* ─── Background ─── */
+.hero-background {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 40%;
+  z-index: 1;
+  animation: slowZoom 22s infinite alternate linear;
+  will-change: transform;
+}
+
+@keyframes slowZoom {
+  from { transform: scale(1); }
+  to   { transform: scale(1.1); }
+}
+
+/* Vignette overlay multicapa */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, rgba(8,8,8,0.45) 0%, rgba(8,8,8,0.78) 80%),
+    linear-gradient(to bottom,
+      rgba(8,8,8,0.6) 0%,
+      rgba(8,8,8,0.25) 30%,
+      rgba(8,8,8,0.25) 55%,
+      rgba(8,8,8,0.88) 100%
+    );
+  z-index: 2;
+}
+
+/* ─── Content ─── */
+.hero-content {
+  position: relative;
+  z-index: 3;
+  max-width: 860px;
+  padding: 0 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+/* Subtitle */
+.hero-subtitle {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 7px;
+  margin-bottom: 0.6rem;
+  text-shadow: 0 1px 12px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6);
+
+  opacity: 0;
+  transform: translateY(20px);
+  animation: heroFadeUp 1s var(--ease-out-expo) forwards;
+  animation-delay: 0.3s;
+}
+
+/* Ornamento ─────── ◆ ─────── */
+.hero-ornament {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  opacity: 0;
+  transform: translateY(18px);
+  animation: heroFadeUp 1s var(--ease-out-expo) forwards;
+  animation-delay: 0.55s;
+}
+
+.ornament-line {
+  display: block;
+  width: 90px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.6));
+  filter: drop-shadow(0 0 4px rgba(0,0,0,0.8));
+}
+
+.ornament-line--right {
+  background: linear-gradient(to left, transparent, rgba(255,255,255,0.6));
+}
+
+.ornament-gem {
+  color: #fff;
+  font-size: 0.55rem;
+  opacity: 0.7;
+  text-shadow: 0 0 8px rgba(0,0,0,0.9);
+}
+
+/* Título principal */
+.hero-title {
+  font-family: var(--font-primary);
+  font-style: italic;
+  font-size: clamp(4.5rem, 10vw, 8rem);
+  font-weight: 300;
+  line-height: 1.0;
+  letter-spacing: 4px;
+  color: #fff;
+  margin-bottom: 1.6rem;
+  text-shadow:
+    0 2px 20px rgba(0, 0, 0, 0.9),
+    0 4px 60px rgba(0, 0, 0, 0.7),
+    0 1px 0 rgba(255,255,255,0.08);
+
+  opacity: 0;
+  transform: translateY(24px);
+  animation: heroFadeUp 1.2s var(--ease-out-expo) forwards;
+  animation-delay: 0.7s;
+}
+
+/* Texto descripción */
+.hero-text {
+  font-family: var(--font-secondary);
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 560px;
+  line-height: 1.85;
+  letter-spacing: 0.3px;
+  margin-bottom: 2.5rem;
+  text-shadow: 0 1px 12px rgba(0,0,0,0.85), 0 2px 30px rgba(0,0,0,0.6);
+
+  opacity: 0;
+  transform: translateY(20px);
+  animation: heroFadeUp 1s var(--ease-out-expo) forwards;
+  animation-delay: 1s;
+}
+
+/* Botones */
+.hero-buttons {
+  display: flex;
+  gap: 1.25rem;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  opacity: 0;
+  transform: translateY(18px);
+  animation: heroFadeUp 1s var(--ease-out-expo) forwards;
+  animation-delay: 1.25s;
+}
+
+/* ─── Scroll hint ─── */
+.hero-scroll-hint {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+
+  opacity: 0;
+  animation: heroFadeUp 1s var(--ease-out-expo) forwards;
+  animation-delay: 1.8s;
+}
+
+.scroll-line {
+  display: block;
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, var(--accent-color), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.5; transform: scaleY(1); transform-origin: top; }
+  50%       { opacity: 1;   transform: scaleY(1.15); transform-origin: top; }
+}
+
+/* ─── Keyframe compartido ─── */
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 4rem;
+  }
+
+  .hero-text {
+    font-size: 0.95rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .ornament-line {
+    width: 55px;
+  }
+}

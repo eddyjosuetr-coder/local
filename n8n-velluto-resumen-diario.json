@@ -1,0 +1,145 @@
+{
+  "name": "Velluto – Resumen Diario de Reservas (8AM)",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## ☀️ Workflow 2 — Resumen Diario de Reservas\n\nCada mañana a las 8AM (martes a domingo) lee Google Sheets,\nfiltras las reservas del día y envía un WhatsApp al staff\ncon el resumen: total, comensales y horario.\n\n**Solo envía si hay reservas ese día.**",
+        "height": 150,
+        "width": 480,
+        "color": 7
+      },
+      "id": "sticky-intro-2",
+      "name": "Descripción del Workflow",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [200, 80]
+    },
+    {
+      "parameters": {
+        "content": "⚠️ **Configura antes de activar:**\n- Credencial Google Sheets OAuth2\n- Credencial HTTP Basic Auth (Twilio)\n- Variable: TWILIO_ACCOUNT_SID\n- Variable: RESTAURANT_OWNER_PHONE\n- Reemplaza TU_GOOGLE_SHEET_ID_AQUI\n\nUsa el mismo Sheet ID del Workflow 1.",
+        "height": 180,
+        "width": 280,
+        "color": 2
+      },
+      "id": "sticky-config-2",
+      "name": "Configuración Requerida",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [700, 80]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [{ "field": "cronExpression", "expression": "0 8 * * 0,2-6" }]
+        }
+      },
+      "id": "node-schedule-01",
+      "name": "Cada Día a las 8AM",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [200, 300],
+      "notes": "PASO 1 — Disparador automático.\nSe ejecuta a las 8:00 AM los días que el restaurante abre:\nmartes, miércoles, jueves, viernes, sábado y domingo.\n(Cron: 0 8 * * 0,2-6 — Dom=0, Mar-Sáb=2-6)",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "operation": "read",
+        "documentId": { "__rl": true, "value": "TU_GOOGLE_SHEET_ID_AQUI", "mode": "id" },
+        "sheetName":  { "__rl": true, "value": "Reservas", "mode": "name" },
+        "options": {}
+      },
+      "id": "node-sheets-02",
+      "name": "Leer Todas las Reservas",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [420, 300],
+      "notes": "PASO 2 — Lectura del registro completo.\nLee todas las filas de la hoja 'Reservas'.\nEl filtrado por fecha se hace en el paso siguiente.\nRequiere: credencial Google Sheets OAuth2.",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const today = new Date().toISOString().split('T')[0];\nconst all = $input.all();\n\n// Filtrar reservas de hoy (excluye canceladas)\nconst hoy = all.filter(item => {\n  const fecha = item.json['Fecha Reserva'] || '';\n  const estado = (item.json['Estado'] || '').toLowerCase();\n  return fecha === today && estado !== 'cancelado';\n});\n\n// Ordenar por hora\nhoy.sort((a, b) => (a.json['Hora'] || '').localeCompare(b.json['Hora'] || ''));\n\nconst count = hoy.length;\nconst totalPersonas = hoy.reduce((s, r) => s + (parseInt(r.json['Personas']) || 0), 0);\n\n// Lista detallada de reservas\nconst lista = count > 0\n  ? hoy.map(r => `🕐 ${r.json['Hora']} | 👥 ${r.json['Personas']} pers. | 👤 ${r.json['Nombre']}`).join('\\n')\n  : 'Sin reservas para hoy';\n\n// Pendientes de confirmar\nconst pendientes = hoy.filter(r => (r.json['Estado'] || '').toLowerCase() === 'pendiente').length;\n\nconst fechaLegible = new Date().toLocaleDateString('es-ES', {\n  weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'\n});\n\nreturn [{\n  json: {\n    tieneReservas: count > 0,\n    count,\n    totalPersonas,\n    pendientes,\n    lista,\n    fechaLegible,\n    today\n  }\n}];"
+      },
+      "id": "node-code-02",
+      "name": "Filtrar Reservas de Hoy",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [640, 300],
+      "notes": "PASO 3 — Filtrado e indicadores del día.\n- Filtra solo las reservas de la fecha de hoy.\n- Excluye las marcadas como 'cancelado'.\n- Ordena por hora ascendente.\n- Calcula: total reservas, total comensales, pendientes por confirmar.\n- Construye la lista horaria para el mensaje.",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "strict" },
+          "conditions": [
+            {
+              "id": "cond-tiene-reservas",
+              "leftValue": "={{ $json.tieneReservas }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "true" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "node-if-02",
+      "name": "¿Hay Reservas Hoy?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [860, 300],
+      "notes": "PASO 4 — Guardia anti-spam.\nSolo continúa si hay al menos una reserva para hoy.\nSi no hay reservas: el workflow termina sin enviar nada.\nAsí el staff no recibe mensajes vacíos.",
+      "notesInFlow": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.twilio.com/2010-04-01/Accounts/{{ $env.TWILIO_ACCOUNT_SID }}/Messages.json",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "From", "value": "whatsapp:+14155238886" },
+            { "name": "To",   "value": "whatsapp:{{ $env.RESTAURANT_OWNER_PHONE }}" },
+            {
+              "name": "Body",
+              "value": "🍽️ *Resumen del Día — Velluto*\n📅 {{ $json.fechaLegible }}\n\n📊 *Reservas hoy:* {{ $json.count }}\n👥 *Comensales totales:* {{ $json.totalPersonas }}\n⏳ *Por confirmar:* {{ $json.pendientes }}\n\n*Horario:*\n{{ $json.lista }}\n\n_¡Buen servicio hoy!_ ✨"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node-whatsapp-02",
+      "name": "WhatsApp Resumen al Staff",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1080, 200],
+      "notes": "PASO 5 — Briefing matutino al staff.\nEnvía al dueño un WhatsApp con:\n- Fecha del día\n- Total de reservas y comensales\n- Cuántas están pendientes de confirmar\n- Lista horaria con nombre y personas por reserva",
+      "notesInFlow": true
+    }
+  ],
+  "connections": {
+    "Cada Día a las 8AM": {
+      "main": [[{ "node": "Leer Todas las Reservas", "type": "main", "index": 0 }]]
+    },
+    "Leer Todas las Reservas": {
+      "main": [[{ "node": "Filtrar Reservas de Hoy", "type": "main", "index": 0 }]]
+    },
+    "Filtrar Reservas de Hoy": {
+      "main": [[{ "node": "¿Hay Reservas Hoy?", "type": "main", "index": 0 }]]
+    },
+    "¿Hay Reservas Hoy?": {
+      "main": [
+        [{ "node": "WhatsApp Resumen al Staff", "type": "main", "index": 0 }],
+        []
+      ]
+    }
+  },
+  "settings": { "executionOrder": "v1" },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

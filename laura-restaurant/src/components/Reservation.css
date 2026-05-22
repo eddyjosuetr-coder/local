@@ -1,0 +1,283 @@
+.reservation {
+  background-color: var(--bg-color);
+  background-image: 
+    linear-gradient(rgba(10, 10, 10, 0.85), rgba(10, 10, 10, 0.95)),
+    url('../assets/reservation_bg.png');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Textura de fondo sutil */
+.reservation::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(ellipse at 80% 50%, rgba(212, 175, 55, 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse at 20% 50%, rgba(212, 175, 55, 0.025) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.reservation-content {
+  display: flex;
+  gap: 5rem;
+  align-items: flex-start;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Info lateral ─── */
+.reservation-info {
+  flex: 1;
+  padding-top: 1rem;
+}
+
+.reservation-info p {
+  color: rgba(240, 236, 228, 0.65);
+  margin-bottom: 2.5rem;
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.9;
+}
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.contact-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding-left: 1rem;
+  border-left: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.contact-label {
+  font-family: var(--font-display);
+  font-size: 0.64rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--accent-color);
+}
+
+.contact-item span:last-child {
+  font-size: 0.95rem;
+  color: rgba(240, 236, 228, 0.8);
+  font-weight: 300;
+}
+
+/* ─── Formulario ─── */
+.reservation-form-container {
+  flex: 1;
+  background: rgba(15, 15, 15, 0.8);
+  padding: 3rem;
+  border: 1px solid rgba(212, 175, 55, 0.1);
+  backdrop-filter: blur(12px);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+.reservation-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1.25rem;
+}
+
+/* ─── Floating label input style ─── */
+.form-group {
+  flex: 1;
+  position: relative;
+}
+
+.reservation-form input,
+.reservation-form select,
+.reservation-form textarea {
+  width: 100%;
+  padding: 1.2rem 0 0.5rem;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  color: var(--text-color);
+  font-family: var(--font-secondary);
+  font-size: 0.92rem;
+  font-weight: 300;
+  transition: border-color 0.35s ease;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  border-radius: 0;
+}
+
+.reservation-form select {
+  cursor: pointer;
+  padding-right: 1.5rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23d4af37' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.25rem center;
+}
+
+.reservation-form select option {
+  background-color: #111;
+  color: var(--text-color);
+}
+
+.reservation-form input:focus,
+.reservation-form select:focus,
+.reservation-form textarea:focus {
+  border-bottom-color: var(--accent-color);
+}
+
+.reservation-form textarea {
+  resize: none;
+  min-height: 80px;
+}
+
+/* Floating labels */
+.form-group label {
+  position: absolute;
+  top: 1.2rem;
+  left: 0;
+  font-family: var(--font-secondary);
+  font-size: 0.82rem;
+  font-weight: 300;
+  color: rgba(240, 236, 228, 0.45);
+  pointer-events: none;
+  transition: all 0.3s var(--ease-out-expo);
+  letter-spacing: 0.5px;
+}
+
+.reservation-form input:focus ~ label,
+.reservation-form input:not(:placeholder-shown) ~ label,
+.reservation-form select:focus ~ label,
+.reservation-form textarea:focus ~ label,
+.reservation-form textarea:not(:placeholder-shown) ~ label {
+  top: 0;
+  font-size: 0.66rem;
+  color: var(--accent-color);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: var(--font-display);
+}
+
+/* El select siempre muestra el label arriba */
+.form-group--select label {
+  top: 0;
+  font-size: 0.66rem;
+  color: var(--accent-color);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: var(--font-display);
+}
+
+/* Forzar color-scheme dark + accent dorado en fecha/hora */
+.reservation-form input[type="date"],
+.reservation-form input[type="time"] {
+  color-scheme: dark;
+  accent-color: var(--accent-color);
+}
+
+/* Eliminar el cuadro azul nativo del navegador al seleccionar campo */
+input[type="date"]::-webkit-datetime-edit-day-field:focus,
+input[type="date"]::-webkit-datetime-edit-month-field:focus,
+input[type="date"]::-webkit-datetime-edit-year-field:focus,
+input[type="time"]::-webkit-datetime-edit-hour-field:focus,
+input[type="time"]::-webkit-datetime-edit-minute-field:focus,
+input[type="time"]::-webkit-datetime-edit-ampm-field:focus {
+  background-color: rgba(212, 175, 55, 0.2) !important;
+  color: #fff !important;
+  outline: none !important;
+  border-radius: 2px;
+}
+
+/* Subrayado dorado animado al focus */
+.form-group::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--accent-color);
+  transition: width 0.35s var(--ease-out-expo);
+}
+
+.form-group:focus-within::after {
+  width: 100%;
+}
+
+/* ─── Botón submit ─── */
+.btn-block {
+  width: 100%;
+  margin-top: 0.5rem;
+  justify-content: center;
+}
+
+.btn-block.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ─── Success state ─── */
+.success-message {
+  text-align: center;
+  padding: 3rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.success-icon {
+  font-size: 1.2rem;
+  color: var(--accent-color);
+  animation: pulse 1.5s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.2); }
+}
+
+.success-message h3 {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--accent-color);
+}
+
+.success-message p {
+  color: rgba(240, 236, 228, 0.65);
+  font-size: 0.95rem;
+  font-weight: 300;
+  max-width: 360px;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 900px) {
+  .reservation-content {
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .reservation-form-container {
+    padding: 2.25rem 1.75rem;
+  }
+}
+
+@media (max-width: 540px) {
+  .form-row {
+    flex-direction: column;
+  }
+}

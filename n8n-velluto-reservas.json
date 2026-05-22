@@ -1,0 +1,309 @@
+{
+  "name": "Velluto – Reservas en Tiempo Real",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 🍽️ Workflow 1 — Reservas en Tiempo Real\n\nRecibe el formulario del sitio web, valida los datos,\nguarda en Google Sheets, envía email al cliente\ny notifica al restaurante por WhatsApp.\n\n**Pasos:** Webhook → Validar → IF → Sheets → Email → WhatsApp → Respuesta",
+        "height": 160,
+        "width": 500,
+        "color": 7
+      },
+      "id": "sticky-intro",
+      "name": "Descripción del Workflow",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [140, 80]
+    },
+    {
+      "parameters": {
+        "content": "⚠️ **Configura antes de activar:**\n- Credencial Gmail OAuth2\n- Credencial Google Sheets OAuth2\n- Credencial HTTP Basic Auth (Twilio)\n- Variable de entorno: TWILIO_ACCOUNT_SID\n- Variable de entorno: RESTAURANT_OWNER_PHONE\n- Reemplaza TU_GOOGLE_SHEET_ID_AQUI\n- Pega la URL del webhook en Reservation.jsx línea 36",
+        "height": 185,
+        "width": 300,
+        "color": 2
+      },
+      "id": "sticky-config",
+      "name": "Configuración Requerida",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [660, 80]
+    },
+    {
+      "parameters": {
+        "content": "**PASO 1 — Recibir Reserva**\n\nPunto de entrada del formulario React.\nEscucha peticiones POST en la ruta /reserva.\n\n📌 Copiar la URL que genera n8n aquí\ny pegarla en Reservation.jsx línea 36.",
+        "height": 140,
+        "width": 200,
+        "color": 4
+      },
+      "id": "sticky-paso1",
+      "name": "Nota Paso 1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [140, 560]
+    },
+    {
+      "parameters": {
+        "content": "**PASO 2 — Validar y Formatear**\n\n- Verifica name, email, date, time, guests\n- Valida formato de email\n- Genera ID único: RSV-2026-XXXXXX\n- Formatea fecha en español\n- Estado inicial: 'pendiente'",
+        "height": 155,
+        "width": 210,
+        "color": 1
+      },
+      "id": "sticky-paso2",
+      "name": "Nota Paso 2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [355, 560]
+    },
+    {
+      "parameters": {
+        "content": "**PASO 3 — ¿Datos Válidos?**\n\n✅ TRUE → continúa al flujo principal\n❌ FALSE → responde error 400\ncon los campos faltantes.",
+        "height": 120,
+        "width": 210,
+        "color": 5
+      },
+      "id": "sticky-paso3",
+      "name": "Nota Paso 3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [570, 560]
+    },
+    {
+      "parameters": {
+        "content": "**PASO 4 — Guardar en Google Sheets**\n\nAgrega fila con: ID, fecha solicitud,\nnombre, email, fecha reserva, hora,\npersonas, mensaje y estado.\n\n🔑 Requiere: Google Sheets OAuth2",
+        "height": 140,
+        "width": 220,
+        "color": 3
+      },
+      "id": "sticky-paso4",
+      "name": "Nota Paso 4",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [785, 560]
+    },
+    {
+      "parameters": {
+        "content": "**PASO 5 — Email al Cliente**\n\nEnvía confirmación HTML con diseño\nde marca del restaurante.\nIncluye ID, fecha, hora, personas.\n\n🔑 Requiere: Gmail OAuth2",
+        "height": 135,
+        "width": 220,
+        "color": 3
+      },
+      "id": "sticky-paso5",
+      "name": "Nota Paso 5",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [1010, 560]
+    },
+    {
+      "parameters": {
+        "content": "**PASO 6 — WhatsApp al Restaurante**\n\nNotifica al dueño al instante vía Twilio.\nEnvía: ID, nombre, email, fecha,\nhora, personas y notas.\n\n🔑 Requiere: HTTP Basic Auth (Twilio)",
+        "height": 145,
+        "width": 220,
+        "color": 3
+      },
+      "id": "sticky-paso6",
+      "name": "Nota Paso 6",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [1235, 560]
+    },
+    {
+      "parameters": {
+        "content": "**PASO 7 — Respuesta Éxito**\n\nDevuelve HTTP 200 al frontend:\n{ success: true, reservationId }\n\nEl sitio React muestra el mensaje\nde confirmación al cliente.",
+        "height": 135,
+        "width": 200,
+        "color": 4
+      },
+      "id": "sticky-paso7",
+      "name": "Nota Paso 7",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [1460, 560]
+    },
+    {
+      "parameters": {
+        "content": "**RAMA ERROR — Datos Inválidos**\n\nDevuelve HTTP 400 al frontend con\nla lista de campos faltantes.\n\nEl sitio React muestra el error al usuario.",
+        "height": 120,
+        "width": 220,
+        "color": 2
+      },
+      "id": "sticky-error",
+      "name": "Nota Error",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [785, 730]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "reserva",
+        "responseMode": "responseNode",
+        "options": { "allowedOrigins": "*" }
+      },
+      "id": "node-webhook-01",
+      "name": "Recibir Reserva",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [200, 380],
+      "webhookId": "velluto-reserva"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Webhook POST: datos en .body cuando Content-Type es application/json\nconst body = $input.first().json.body || $input.first().json;\n\n// Validar campos obligatorios\nconst required = ['name', 'email', 'date', 'time', 'guests'];\nconst missing = required.filter(f => !body[f] || String(body[f]).trim() === '');\n\n// Validar formato de email\nconst emailOk = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(body.email || '');\n\n// Formatear fecha legible en español\nlet formattedDate = body.date || '';\ntry {\n  formattedDate = new Date(body.date).toLocaleDateString('es-ES', {\n    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'\n  });\n} catch (_) {}\n\n// ID único de la reserva\nconst reservationId = 'RSV-' + new Date().getFullYear() + '-' + Date.now().toString().slice(-6);\n\nreturn [{\n  json: {\n    isValid: missing.length === 0 && emailOk,\n    missingFields: missing,\n    emailOk,\n    reservationId,\n    name:          String(body.name  || '').trim(),\n    email:         String(body.email || '').trim().toLowerCase(),\n    date:          body.date,\n    formattedDate,\n    time:          body.time,\n    guests:        parseInt(body.guests) || 1,\n    message:       String(body.message || '').trim(),\n    createdAt:     new Date().toISOString(),\n    status:        'pendiente'\n  }\n}];"
+      },
+      "id": "node-code-01",
+      "name": "Validar y Formatear",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [420, 380]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "typeValidation": "strict" },
+          "conditions": [
+            {
+              "id": "cond-valid",
+              "leftValue": "={{ $json.isValid }}",
+              "rightValue": true,
+              "operator": { "type": "boolean", "operation": "true" }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "node-if-01",
+      "name": "¿Datos Válidos?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [640, 380]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": { "__rl": true, "value": "TU_GOOGLE_SHEET_ID_AQUI", "mode": "id" },
+        "sheetName":  { "__rl": true, "value": "Reservas", "mode": "name" },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID Reserva":      "={{ $json.reservationId }}",
+            "Fecha Solicitud": "={{ $json.createdAt }}",
+            "Nombre":          "={{ $json.name }}",
+            "Email":           "={{ $json.email }}",
+            "Fecha Reserva":   "={{ $json.date }}",
+            "Hora":            "={{ $json.time }}",
+            "Personas":        "={{ $json.guests }}",
+            "Mensaje":         "={{ $json.message }}",
+            "Estado":          "={{ $json.status }}"
+          },
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "node-sheets-01",
+      "name": "Guardar en Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [860, 240]
+    },
+    {
+      "parameters": {
+        "sendTo":    "={{ $node['Validar y Formatear'].json.email }}",
+        "subject":   "✓ Reserva recibida – Velluto Ristorante | {{ $node['Validar y Formatear'].json.reservationId }}",
+        "emailType": "html",
+        "message":   "<div style=\"font-family:'Georgia',serif;max-width:600px;margin:0 auto;background:#080808;color:#f0ece4;padding:40px 30px\">\n  <div style=\"text-align:center;margin-bottom:30px\">\n    <h1 style=\"color:#d4af37;font-size:26px;letter-spacing:5px;margin:0\">VELLUTO</h1>\n    <p style=\"color:#888;font-size:11px;letter-spacing:3px;margin:4px 0\">RISTORANTE</p>\n    <div style=\"width:50px;height:1px;background:#d4af37;margin:14px auto\"></div>\n  </div>\n  <h2 style=\"color:#f0ece4;font-size:19px;text-align:center;margin-bottom:22px\">Solicitud de Reserva Recibida</h2>\n  <p>Estimado/a <strong style=\"color:#d4af37\">{{ $node['Validar y Formatear'].json.name }}</strong>,</p>\n  <p style=\"color:#ccc;line-height:1.7\">Hemos recibido su solicitud de reserva. Le contactaremos a la brevedad para confirmarla.</p>\n  <div style=\"background:#111;border-left:3px solid #d4af37;padding:20px;margin:24px 0;border-radius:2px\">\n    <h3 style=\"color:#d4af37;margin-top:0;font-size:13px;letter-spacing:2px\">DETALLES DE SU RESERVA</h3>\n    <table style=\"width:100%;color:#ccc;font-size:14px;border-collapse:collapse\">\n      <tr><td style=\"padding:6px 0;color:#888;width:160px\">ID de Reserva</td><td style=\"color:#d4af37\"><strong>{{ $node['Validar y Formatear'].json.reservationId }}</strong></td></tr>\n      <tr><td style=\"padding:6px 0;color:#888\">Fecha</td><td>{{ $node['Validar y Formatear'].json.formattedDate }}</td></tr>\n      <tr><td style=\"padding:6px 0;color:#888\">Hora</td><td>{{ $node['Validar y Formatear'].json.time }}</td></tr>\n      <tr><td style=\"padding:6px 0;color:#888\">Personas</td><td>{{ $node['Validar y Formatear'].json.guests }}</td></tr>\n      <tr><td style=\"padding:6px 0;color:#888\">Notas</td><td>{{ $node['Validar y Formatear'].json.message || '—' }}</td></tr>\n    </table>\n  </div>\n  <p style=\"color:#888;font-size:12px;text-align:center;margin-top:28px;line-height:1.9\">\n    Velluto Ristorante &middot; reservas@velluto-ristorante.com &middot; +1 (555) 123-4567<br>\n    Martes a Domingo &middot; 18:00 – 23:30\n  </p>\n  <p style=\"text-align:center;color:#d4af37;font-size:20px\">◆</p>\n</div>",
+        "options": { "replyTo": "reservas@velluto-ristorante.com" }
+      },
+      "id": "node-gmail-01",
+      "name": "Email Confirmación al Cliente",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [1060, 240]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.twilio.com/2010-04-01/Accounts/{{ $env.TWILIO_ACCOUNT_SID }}/Messages.json",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            { "name": "From", "value": "whatsapp:+14155238886" },
+            { "name": "To",   "value": "whatsapp:{{ $env.RESTAURANT_OWNER_PHONE }}" },
+            {
+              "name": "Body",
+              "value": "🍽️ *Nueva Reserva — Velluto*\n\n📋 *ID:* {{ $node['Validar y Formatear'].json.reservationId }}\n👤 *Cliente:* {{ $node['Validar y Formatear'].json.name }}\n📧 *Email:* {{ $node['Validar y Formatear'].json.email }}\n📅 *Fecha:* {{ $node['Validar y Formatear'].json.formattedDate }}\n🕐 *Hora:* {{ $node['Validar y Formatear'].json.time }}\n👥 *Personas:* {{ $node['Validar y Formatear'].json.guests }}{{ $node['Validar y Formatear'].json.message ? '\n💬 *Notas:* ' + $node['Validar y Formatear'].json.message : '' }}\n\n_Revisa Google Sheets para gestionar_"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "node-whatsapp-01",
+      "name": "WhatsApp al Restaurante",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1260, 240]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, reservationId: $node['Validar y Formatear'].json.reservationId, message: 'Reserva recibida. Te contactaremos pronto para confirmarla.' }) }}",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [{ "name": "Access-Control-Allow-Origin", "value": "*" }]
+          }
+        }
+      },
+      "id": "node-respond-ok",
+      "name": "Respuesta Éxito",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1460, 240]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: false, error: 'Campos incompletos o email inválido', missingFields: $json.missingFields }) }}",
+        "options": {
+          "responseCode": 400,
+          "responseHeaders": {
+            "entries": [{ "name": "Access-Control-Allow-Origin", "value": "*" }]
+          }
+        }
+      },
+      "id": "node-respond-err",
+      "name": "Respuesta Error",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [860, 520]
+    }
+  ],
+  "connections": {
+    "Recibir Reserva": {
+      "main": [[{ "node": "Validar y Formatear", "type": "main", "index": 0 }]]
+    },
+    "Validar y Formatear": {
+      "main": [[{ "node": "¿Datos Válidos?", "type": "main", "index": 0 }]]
+    },
+    "¿Datos Válidos?": {
+      "main": [
+        [{ "node": "Guardar en Google Sheets",      "type": "main", "index": 0 }],
+        [{ "node": "Respuesta Error",                "type": "main", "index": 0 }]
+      ]
+    },
+    "Guardar en Google Sheets": {
+      "main": [[{ "node": "Email Confirmación al Cliente", "type": "main", "index": 0 }]]
+    },
+    "Email Confirmación al Cliente": {
+      "main": [[{ "node": "WhatsApp al Restaurante", "type": "main", "index": 0 }]]
+    },
+    "WhatsApp al Restaurante": {
+      "main": [[{ "node": "Respuesta Éxito", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": { "executionOrder": "v1" },
+  "meta": { "templateCredsSetupCompleted": false }
+}

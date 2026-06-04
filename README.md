@@ -14,21 +14,19 @@ Este proyecto consiste en una aplicación web moderna (Landing Page y Sistema de
 
 A continuación, una vista previa de cómo quedó la página (desliza para ver más):
 
-````carousel
 ![Sección Inicio / Hero](muestras/01_hero.png)
-<!-- slide -->
+
 ![Sección Experiencia](muestras/02_experiencia.png)
-<!-- slide -->
+
 ![Sección Menú 1](muestras/03_menu_1.png)
-<!-- slide -->
+
 ![Sección Menú 2](muestras/06_menu_2.png)
-<!-- slide -->
+
 ![Sección Menú 3](muestras/07_menu_3.png)
-<!-- slide -->
+
 ![Sección Reservas](muestras/04_reservas.png)
-<!-- slide -->
+
 ![Sección Footer](muestras/05_footer.png)
-````
 
 La web fue construida utilizando React y Vite, diseñada para ofrecer una experiencia premium y fluida al usuario. Se desarrollaron los siguientes componentes principales:
 
@@ -52,13 +50,11 @@ La web fue construida utilizando React y Vite, diseñada para ofrecer una experi
 
 A continuación se muestra el workflow de reservas implementado:
 
-````carousel
 ![Workflow de Reservas en n8n - Parte 1](muestras/08_n8n_workflow_1.png)
-<!-- slide -->
+
 ![Workflow de Reservas en n8n - Parte 2](muestras/09_n8n_workflow_2.png)
-<!-- slide -->
+
 ![Workflow Resumen Diario](muestras/10_n8n_workflow_3.png)
-````
 
 El núcleo operativo del restaurante fue automatizado creando dos flujos de trabajo (workflows) en **n8n** para procesar las reservas en tiempo real y mantener al equipo informado.
 

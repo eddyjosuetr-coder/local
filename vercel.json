@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd laura-restaurant && npm install && npm run build",
+  "outputDirectory": "laura-restaurant/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

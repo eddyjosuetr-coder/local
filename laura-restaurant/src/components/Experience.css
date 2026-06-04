@@ -94,6 +94,43 @@
   object-position: center 30%;
 }
 
+/* ─── Pull quote ─── */
+.pull-quote {
+  font-family: var(--font-primary);
+  font-style: italic;
+  font-size: clamp(1.7rem, 3vw, 2.6rem);
+  font-weight: 300;
+  color: rgba(240, 236, 228, 0.18);
+  line-height: 1.45;
+  letter-spacing: 0.5px;
+  text-align: center;
+  padding: 4.5rem 3rem;
+  position: relative;
+  border-top: 1px solid rgba(212, 175, 55, 0.12);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+  margin: 5rem 0;
+}
+
+.pull-quote__mark {
+  display: block;
+  font-family: var(--font-primary);
+  font-size: clamp(4rem, 7vw, 6rem);
+  line-height: 0.6;
+  color: rgba(212, 175, 55, 0.18);
+  margin-bottom: 0.8rem;
+}
+
+.pull-quote__attribution {
+  display: block;
+  font-family: var(--font-display);
+  font-style: normal;
+  font-size: 0.6rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(212, 175, 55, 0.4);
+  margin-top: 2rem;
+}
+
 /* ─── Galería ─── */
 .gallery-section {
   margin-top: 2rem;

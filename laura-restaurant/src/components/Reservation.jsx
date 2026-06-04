@@ -27,26 +27,13 @@ const Reservation = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const [error, setError] = useState('');
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
-    try {
-      const res = await fetch('TU_WEBHOOK_URL_DE_N8N_AQUI', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      const data = await res.json();
-      if (!res.ok || !data.success) throw new Error(data.error || 'Error al enviar');
-      setSubmitted(true);
-    } catch (err) {
-      setError('Hubo un problema al enviar tu reserva. Por favor intenta de nuevo.');
-    } finally {
+    setTimeout(() => {
       setLoading(false);
-    }
+      setSubmitted(true);
+    }, 1200);
   };
 
   return (
@@ -81,7 +68,7 @@ const Reservation = () => {
               <div className="success-message">
                 <span className="success-icon">◆</span>
                 <h3>¡Reserva Confirmada!</h3>
-                <p>Gracias, {formData.name}. Los detalles fueron enviados a {formData.email}.</p>
+                <p>Gracias, {formData.name}. Nos pondremos en contacto a {formData.email} para confirmar su mesa.</p>
                 <button className="btn btn-outline" onClick={() => setSubmitted(false)}>
                   Nueva Reserva
                 </button>
@@ -141,11 +128,6 @@ const Reservation = () => {
                   ></textarea>
                   <label htmlFor="f-message">Peticiones especiales (opcional)</label>
                 </div>
-                {error && (
-                  <p style={{ color: '#e05252', fontSize: '0.875rem', marginBottom: '0.75rem' }}>
-                    {error}
-                  </p>
-                )}
                 <button
                   type="submit"
                   className={`btn btn-primary btn-block ${loading ? 'loading' : ''}`}

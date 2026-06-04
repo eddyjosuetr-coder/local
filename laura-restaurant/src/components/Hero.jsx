@@ -9,7 +9,12 @@ const Hero = () => {
         <div className="hero-overlay"></div>
       </div>
 
+      {/* Letra fantasma de marca */}
+      <div className="hero-ghost-letter" aria-hidden="true">V</div>
+
       <div className="hero-content">
+        <p className="hero-established">Fondato nel · MMXX</p>
+
         <p className="hero-subtitle">Alta Cocina Italiana</p>
 
         <div className="hero-ornament">

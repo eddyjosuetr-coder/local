@@ -1,0 +1,43 @@
+/* Only active on fine-pointer devices (mouse) */
+@media (pointer: fine) {
+  .cursor-dot,
+  .cursor-ring {
+    position: fixed;
+    top: -3px;
+    left: -3px;
+    pointer-events: none;
+    z-index: 99999;
+    will-change: transform;
+    border-radius: 50%;
+  }
+
+  .cursor-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--accent-color);
+    mix-blend-mode: normal;
+  }
+
+  .cursor-ring {
+    top: -16px;
+    left: -16px;
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(212, 175, 55, 0.45);
+    background: transparent;
+    transition:
+      width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+      height 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+      top 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+      left 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 0.3s ease;
+  }
+
+  .cursor-ring--hover {
+    width: 50px;
+    height: 50px;
+    top: -25px;
+    left: -25px;
+    border-color: var(--accent-color);
+  }
+}

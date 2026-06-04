@@ -24,14 +24,11 @@ const Experience = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
+          if (entry.isIntersecting) entry.target.classList.add('visible');
         });
       },
       { threshold: 0.12 }
     );
-
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     return () => observer.disconnect();
   }, []);
@@ -40,7 +37,7 @@ const Experience = () => {
     <section id="experience" className="section experience">
       <div className="container">
 
-        {/* ─── Texto + ilustración ─── */}
+        {/* ─── Texto + imagen ─── */}
         <div className="context-section reveal">
           <div className="context-text">
             <h2 className="section-title" style={{ textAlign: 'left', marginBottom: '1.5rem' }}>
@@ -58,7 +55,14 @@ const Experience = () => {
           </div>
         </div>
 
-        {/* ─── Galería de platos ─── */}
+        {/* ─── Pull quote ─── */}
+        <blockquote className="pull-quote reveal">
+          <span className="pull-quote__mark">&ldquo;</span>
+          La cucina è la più bella forma d&rsquo;arte italiana.
+          <span className="pull-quote__attribution">— Arte Culinaria · Firenze</span>
+        </blockquote>
+
+        {/* ─── Galería ─── */}
         <div className="gallery-section">
           <div className="gallery-header reveal">
             <h2 className="section-title">El Arte en Nuestros Platos</h2>

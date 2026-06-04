@@ -1,0 +1,63 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-color: #0d0608; /* Very dark pinkish/reddish black */
+  --primary-pink: #FFA6C9; /* Pink color from the image */
+  --text-white: #ffffff;
+  --font-gothic: 'UnifrakturMaguntia', 'Pirata One', serif;
+  --font-sans: 'Inter', sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-color);
+  color: var(--text-white);
+  overflow-x: hidden;
+  /* hide default scrollbar for better custom feel if desired, but we'll leave it for now */
+}
+
+/* Custom Cursor Hand Style */
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 50px;
+  height: 50px;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0; /* will be shown via js */
+}
+
+.custom-cursor img {
+  width: 100%;
+  height: auto;
+  transform: rotate(-15deg); /* Slight angle for dragging effect */
+}
+
+.dragging .custom-cursor {
+  transform: translate(-50%, -50%) scale(0.9);
+}
+
+/* Utility classes */
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.absolute-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
